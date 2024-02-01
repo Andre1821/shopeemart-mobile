@@ -1,32 +1,18 @@
-import { View, Text, Button } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
-import { useAuth } from '@clerk/clerk-expo';
 import Colors from '../../utils/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from './Header';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function ProfileScreen({ navigation }) {
   const [username, setUsername] = useState('')
 
-  const SignOut = () => {
-    const { isLoaded, signOut } = useAuth();
-    if (!isLoaded) {
-      return null;
-    }
-    return (
-      <View>
-        <Button
-          title="Sign Out"
-          onPress={async () => {
-            signOut();
-            await AsyncStorage.removeItem('token')
-            await AsyncStorage.removeItem('username')
-            navigation.navigate("Login")
-          }}
-        />
-      </View>
-    );
-  };
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('token')
+    await AsyncStorage.removeItem('username')
+    navigation.navigate("Login")
+  }
 
   return (
     <View style={{ backgroundColor: Colors.PRIMARY, height: '100%' }}>
@@ -34,11 +20,31 @@ export default function ProfileScreen({ navigation }) {
         <Text>ProfileScreen</Text>
       </View>
       <View>
-        <Header/>
+        <Header />
       </View>
       <View style={{ paddingTop: 60 }}>
-        <SignOut />
+        <TouchableOpacity
+          style={styles.buttonStyle}
+          onPress={handleLogout}
+        >
+          <Text style={styles.text}>Login</Text>
+        </TouchableOpacity>
       </View>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  buttonStyle: {
+      marginTop: 20,
+      backgroundColor: '#1873EA',
+      borderRadius: 10,
+      paddingHorizontal: 40,
+      paddingVertical: 5,
+  },
+  text: {
+    fontSize: 20, 
+    fontWeight: 'bold', 
+    color: Colors.WHITE
+  }
+})

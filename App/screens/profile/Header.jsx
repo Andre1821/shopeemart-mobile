@@ -1,12 +1,9 @@
-import { Image, StyleSheet, Text, TextInput, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useUser } from '@clerk/clerk-expo'
-import { FontAwesome6, FontAwesome5 } from '@expo/vector-icons'
 import Colors from '../../utils/Colors'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Header = () => {
-    // const { user, isLoading } = useUser();
     const [username, setUsername] = useState('')
 
     useEffect(() => {
@@ -24,22 +21,12 @@ const Header = () => {
         <View style={styles.container}>
             <View style={styles.profileMainContainer}>
                 <View style={styles.profileConntainer}>
-                    {/* <Image
-                        source={{ uri: user?.imageUrl }}
-                        style={styles.userImage}
-                    /> */}
                     <View>
                         <Text >Welcome</Text>
                         <Text >{username}</Text>
                     </View>
-                    {/* <FontAwesome6 name="bookmark" size={24} color={Colors.WHITE} /> */}
                 </View>
             </View>
-
-            {/* <View style={styles.searchBarContainer}>
-                <TextInput placeholder="Search" style={styles.textInput} />
-                <FontAwesome5 name="search" size={24} color={Colors.PRIMARY} style={styles.searchBtn} />
-            </View> */}
         </View>
     )
 }

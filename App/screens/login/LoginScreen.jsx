@@ -1,47 +1,26 @@
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image, ScrollView, ToastAndroid, Alert } from 'react-native'
 import React, { useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import Colors from '../../utils/Colors'
+import { Feather } from '@expo/vector-icons'
 
 const LoginScreen = ({ navigation }) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [seePassword, setSeePassword] = useState(true)
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
-
-    const validationPassword = value => {
-        // const nonWhiteSpace = /^\S*$/
-        // if (!nonWhiteSpace.test(value)) {
-        //     return 'Password must not contain Whitespaces!'
-        // }
-
-        // const containUpperCase = /^(?=.*[A-Z]).*$/
-        // if (!containUpperCase.test(value)) {
-        //     return 'Password must have at least one Uppercase Character!'
-        // }
-
-        // const containLowerCase = /^(?=.*[a-z]).*$/
-        // if (!containLowerCase.test(value)) {
-        //     return 'Password must have at least one Lowercase Character!'
-        // }
-
-        // const containNumber = /^(?=.*[0-9]).*$/
-        // if (!containNumber.test(value)) {
-        //     return 'Password must have at least one digit of number!'
-        // }
-
-        // const validLength = /^.{8,16}$/
-        // if (!validLength.test(value)) {
-        //     return 'Password must be minimun 8 characters'
-        // }
-
-        return null
+    const handleTogglePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible);
     }
 
     const handleLogin = async () => {
-        // console.log(username, password);
-        axios.post('http://10.10.100.152:8080/api/auth/login', {
+        if (!username || !password) {
+            ToastAndroid.show('Please enter both username and password')
+            return
+        }
+
+        axios.post('http://172.20.10.3:8080/api/auth/login', {
             username,
             password,
         })
@@ -51,14 +30,27 @@ const LoginScreen = ({ navigation }) => {
 
                 await AsyncStorage.setItem('token', response.data.data.token)
                 await AsyncStorage.setItem('username', response.data.data.username)
+                setPassword('')
+                setUsername('')
                 navigation.navigate('Home')
+                ToastAndroid.show('Successfully Login', ToastAndroid.SHORT)
             })
             .catch((error) => {
-                console.error(error)
+                // console.error(error)
+
+                if (error.response) {
+                    ToastAndroid.show('User not found, please enter again', ToastAndroid.SHORT)
+                } else if (error.request) {
+                    ToastAndroid.show('No response from server', ToastAndroid.SHORT)
+
+                } else {
+                    ToastAndroid.show('Error during request setup', ToastAndroid.SHORT)
+                }
             })
     }
+
     return (
-        <ScrollView>
+        <ScrollView style={{ flex: 1, backgroundColor: Colors.WHITE }}>
             <View style={styles.loginContainer}>
                 <View style={styles.titleStyle}>
                     <Text style={{ margin: 5, fontSize: 30, fontWeight: 'bold', color: Colors.WHITE }}>Login</Text>
@@ -71,12 +63,21 @@ const LoginScreen = ({ navigation }) => {
                         value={username}
                         onChangeText={setUsername}
                     />
-                    <TextInput
-                        placeholder='password'
-                        style={styles.inputStyle}
-                        value={password}
-                        onChangeText={setPassword}
-                    />
+                    <View>
+                        <TextInput
+                            placeholder='password'
+                            style={styles.inputStyle}
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry={!isPasswordVisible}
+                        />
+                        <TouchableOpacity
+                            onPress={handleTogglePasswordVisibility}
+                            style={{ position: 'absolute', top: 13, right: 13 }}
+                        >
+                            <Feather name={!isPasswordVisible ? 'eye-off' : 'eye'} size={24} color='black' />
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View>
                     {username == '' || password == '' ? (
@@ -115,7 +116,7 @@ const LoginScreen = ({ navigation }) => {
                             Don't have an account ?
                         </Text>
                         <TouchableOpacity>
-                            <Text style={styles.buttonRegister}>Register</Text>
+                            <Text style={styles.buttonRegister} onPress={() => navigation.navigate('Register')}>Register</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -133,11 +134,12 @@ const styles = StyleSheet.create({
         flex: 1,
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
+        height: '100%'
     },
     inputStyle: {
         margin: 5,
         padding: 5,
-        backgroundColor: '#ffd1b3',
+        backgroundColor: Colors.SECONDARY,
         borderRadius: 10,
         width: 300,
         height: 40,
