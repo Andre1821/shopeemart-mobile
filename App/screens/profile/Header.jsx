@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Colors from '../../utils/Colors'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -21,6 +21,7 @@ const Header = () => {
         <View style={styles.container}>
             <View style={styles.profileMainContainer}>
                 <View style={styles.profileConntainer}>
+                    <Image style={styles.image} source={require('../../../assets/favicon.png')}/>
                     <View>
                         <Text >Welcome</Text>
                         <Text >{username}</Text>
@@ -34,17 +35,17 @@ const Header = () => {
 export default Header
 
 const styles = StyleSheet.create({
-    userImage: {
-        width: 45,
-        height: 45,
-        borderRadius: 99
+    image: {
+        width: 60,
+        height: 60,
+        borderRadius: 99,
+        marginRight:10,
+        backgroundColor: Colors.WHITE,
     },
     container: {
         padding: 20,
-        paddingTop: 40,
+        paddingTop: 70,
         backgroundColor: Colors.PRIMARY,
-        borderBottomLeftRadius: 25,
-        borderBottomRightRadius: 25,
 
     },
     profileConntainer: {

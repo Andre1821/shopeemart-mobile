@@ -1,10 +1,11 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text } from 'react-native';
-import { AntDesign, Ionicons, FontAwesome5, Entypo } from '@expo/vector-icons'
+import { AntDesign, FontAwesome5, Entypo } from '@expo/vector-icons'
 import HomeScreen from '../screens/home/HomeScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import Colors from '../utils/Colors';
+import ProductScreen from '../screens/product/ProductScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,7 +17,6 @@ export default function TabNavigations() {
                 tabBarActiveTintColor: Colors.PRIMARY
             }}
         >
-
             <Tab.Screen name="Home" component={HomeScreen}
                 options={{
                     tabBarLabel: ({ color }) => {
@@ -27,26 +27,16 @@ export default function TabNavigations() {
                     ),
                 }}
             />
-            {/* <Tab.Screen name="Booking" component={BookingScreen}
+            <Tab.Screen name="Product" component={ProductScreen}
                 options={{
                     tabBarLabel: ({ color }) => {
-                        <Text style={{ color: color, fontSize: 12, marginTop: -7 }}>Booking</Text>
+                        <Text style={{ color: color, fontSize: 12, marginTop: -7 }}>Product</Text>
                     },
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="bookmarks-outline" size={24} color={color} />
+                        <Entypo name="list" size={24} color={color} />
                     ),
                 }}
             />
-            <Tab.Screen name="Menu" component={MenuScreen}
-                options={{
-                    tabBarLabel: ({ color }) => {
-                        <Text style={{ color: color, fontSize: 12, marginTop: -7 }}>Profile</Text>
-                    },
-                    tabBarIcon: ({ color, size }) => (
-                        <Entypo name="box" size={24} color={color} />
-                    ),
-                }}
-            /> */}
             <Tab.Screen name="Profile" component={ProfileScreen}
                 options={{
                     tabBarLabel: ({ color }) => {

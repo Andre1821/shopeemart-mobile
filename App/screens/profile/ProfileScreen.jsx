@@ -15,12 +15,9 @@ export default function ProfileScreen({ navigation }) {
   }
 
   return (
-    <View style={{ backgroundColor: Colors.PRIMARY, height: '100%' }}>
+    <View style={{ backgroundColor: Colors.WHITE, height: '100%' }}>
       <View>
-        <Text>ProfileScreen</Text>
-      </View>
-      <View>
-        <Header />
+        <Header/>
       </View>
       <View style={{ paddingTop: 60 }}>
         <TouchableOpacity
